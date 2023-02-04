@@ -6,7 +6,7 @@ services:
         container_name: jni_express_template
         image: jni_express_template
         ports:
-            - "8081:8081"
+            - "8090:8090"
         environment:
-            - API_PORT=8081
+            - API_PORT=8090
         restart: unless-stopped

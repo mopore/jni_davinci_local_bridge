@@ -5,6 +5,7 @@ COPY package*.json /app/
 RUN pnpm install
 
 COPY src /app/src/
+COPY .env /app/
 # COPY resources /app/resources/
 COPY config /app/config/
 COPY tsconfig.json /app/

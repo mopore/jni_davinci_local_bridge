@@ -1,13 +1,13 @@
 ```
-    ███        ▄████████   ▄▄▄▄███▄▄▄▄      ▄███████▄  ▄█          ▄████████     ███        ▄████████ 
-▀█████████▄   ███    ███ ▄██▀▀▀███▀▀▀██▄   ███    ███ ███         ███    ███ ▀█████████▄   ███    ███ 
-   ▀███▀▀██   ███    █▀  ███   ███   ███   ███    ███ ███         ███    ███    ▀███▀▀██   ███    █▀  
-    ███   ▀  ▄███▄▄▄     ███   ███   ███   ███    ███ ███         ███    ███     ███   ▀  ▄███▄▄▄     
-    ███     ▀▀███▀▀▀     ███   ███   ███ ▀█████████▀  ███       ▀███████████     ███     ▀▀███▀▀▀     
-    ███       ███    █▄  ███   ███   ███   ███        ███         ███    ███     ███       ███    █▄  
-    ███       ███    ███ ███   ███   ███   ███        ███▌    ▄   ███    ███     ███       ███    ███ 
-   ▄████▀     ██████████  ▀█   ███   █▀   ▄████▀      █████▄▄██   ███    █▀     ▄████▀     ██████████ 
-                                                      ▀                                               
+████████▄     ▄████████       ▄█    █▄   ▄█  ███▄▄▄▄    ▄████████  ▄█  
+███   ▀███   ███    ███      ███    ███ ███  ███▀▀▀██▄ ███    ███ ███  
+███    ███   ███    ███      ███    ███ ███▌ ███   ███ ███    █▀  ███▌ 
+███    ███   ███    ███      ███    ███ ███▌ ███   ███ ███        ███▌ 
+███    ███ ▀███████████      ███    ███ ███▌ ███   ███ ███        ███▌ 
+███    ███   ███    ███      ███    ███ ███  ███   ███ ███    █▄  ███  
+███   ▄███   ███    ███      ███    ███ ███  ███   ███ ███    ███ ███  
+████████▀    ███    █▀        ▀██████▀  █▀    ▀█   █▀  ████████▀  █▀   
+                                                                       
 ```
 
 Source for ASCII-fonts: https://www.coolgenerator.com/ascii-text-generator
@@ -15,13 +15,17 @@ Source for ASCII-fonts: https://www.coolgenerator.com/ascii-text-generator
 
 
 # What is this?
-This is template for an Express/TypeScript project in VS Code with linting.
-It will make the test api available via http://localhost:8081/api/test.
+A simple API to bridge the communication to open AI services to be used as a 
+Siri shortcut (as an example).
+
+It will make the test api available via http://localhost:8090/api/davinci.
 
 # What's the motivation?
 To have an easier start for my projects.
 
 # Installation
+Provide a .env file in the root directory and provide an Open AI API key for "openai.apiKey".
+
 Make sure pnpm is installed (`npm install -g pnpm`).
 ```
 pnpm i
@@ -45,15 +49,6 @@ The VS Code launch config (.vscode/launch.json) and the provided docker compose 
 
 # Release History
 
-## v0.2.0
-- Collect all the latest versions.
-- Replace npm with pnpm.
-- Use 'NodeNext' for module resolution.
-- Replace jest with mocha.
+## v0.1.0 (Untagged)
+- Your text here.
 
-## v0.1.1
-- Template restriction for linting removed.
-- Documentation in readme extended.
-
-## v0.1.0
-- Initial commit.

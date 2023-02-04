@@ -5,8 +5,8 @@ const apiPortRaw = process.env["API_PORT"];
 const apiPort = Number(apiPortRaw);
 
 const app = express();
-app.use( express.json() );
-Functions.apply( app );
+app.use(express.json());
+Functions.apply(app);
 export const server = app;
 
 server.listen( 

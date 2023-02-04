@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
+import { DavinciBridge } from "./openai/DavinciBridge.js";
 
 dotenv.config();
-const testEnvValue = process.env["TEST_VAR"] ?? "Define 'TEST_VAR' in .env file in project's root";
+const openApiKey = process.env["openai.apiKey"] ?? 
+	"Define 'openai.apiKey' in .env file in project's root";
 
-console.log(`Hello from the Template. Test value: ${testEnvValue}`);
+const apiBridge = new DavinciBridge(openApiKey);
+const prompt = "Tell a story about a blue cat in three sentences.";
+const responseText = await apiBridge.request(prompt);
+console.log(responseText);

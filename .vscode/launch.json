@@ -15,7 +15,7 @@
             "env": {
                 "CONFIG_FILE_ENV":"ch-jni-local", 
                 "TZ":"UTC",
-                "API_PORT":"8081",
+                "API_PORT":"8090",
             },
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
