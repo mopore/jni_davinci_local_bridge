@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "NodeNext",
+    "allowJs": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "strictBindCallApply":true,
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,  
+    "skipLibCheck": true, // This should improve preformance.
+    "noImplicitOverride": true
+  },
+  "include": [
+    "./src/**/*", "./test/**/*", 
+  ]
+}

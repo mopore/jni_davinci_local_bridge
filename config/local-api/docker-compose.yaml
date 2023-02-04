@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+
+    jni_express_template:
+        container_name: jni_express_template
+        image: jni_express_template
+        ports:
+            - "8081:8081"
+        environment:
+            - API_PORT=8081
+        restart: unless-stopped
