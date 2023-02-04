@@ -19,9 +19,18 @@ A simple API to bridge the communication to open AI services to be used as a
 Siri shortcut (as an example).
 
 It will make the test api available via http://localhost:8090/api/davinci.
+Provide a POST in the following form:
+```
+{
+    "question": "Tell a story about a green elephant in fource sentences."
+}
+```
+The answer will be JSON in a property "answer".
 
 # What's the motivation?
-To have an easier start for my projects.
+The bridge approach provides more control than contacting the open ai services directly. 
+Further, the interface can be stripped down to make it easier for the shortcut which 
+could also primarily use a device in the local network first.
 
 # Installation
 Provide a .env file in the root directory and provide an Open AI API key for "openai.apiKey".
