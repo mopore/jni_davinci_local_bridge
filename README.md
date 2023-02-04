@@ -22,7 +22,7 @@ It will make the test api available via http://localhost:8090/api/davinci.
 Provide a POST in the following form:
 ```
 {
-    "question": "Tell a story about a green elephant in fource sentences."
+    "question": "Tell a story about a green elephant in four sentences."
 }
 ```
 The answer will be JSON in a property "answer".
