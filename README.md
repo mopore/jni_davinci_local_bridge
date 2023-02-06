@@ -58,6 +58,6 @@ The VS Code launch config (.vscode/launch.json) and the provided docker compose 
 
 # Release History
 
-## v0.1.0 (Untagged)
-- Your text here.
+## v0.1.0
+- Initial commit.
 

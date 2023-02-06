@@ -1,4 +1,4 @@
-FROM node:19-slim
+FROM node:16-slim
 WORKDIR /app
 RUN npm install -g pnpm
 COPY package*.json /app/
