@@ -1,6 +1,6 @@
 {
   "name": "jni_davinci_local_bridge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple API to bridge the communication to open AI services to be used as a Siri shortcut (as an example).",
   "main": "App.ts",
   "type": "module",
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "mocha dist/test/**/*.js --recursive --exit",
     "build": "rm -rf ./dist && tsc -b",
-    "build-image": "docker image build -t jni_davinci_local_bridge .",
+    "build-api-image": "docker image build -t jni_davinci_local_bridge .",
     "up-container": "docker-compose -f ./config/local-api/docker-compose.yaml up -d",
     "down-container": "docker-compose -f ./config/local-api/docker-compose.yaml down",
     "preinstall": "npx only-allow pnpm"
