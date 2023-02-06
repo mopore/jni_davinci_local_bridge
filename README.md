@@ -58,6 +58,9 @@ The VS Code launch config (.vscode/launch.json) and the provided docker compose 
 
 # Release History
 
+## v0.1.1
+- Correct image name.
+
 ## v0.1.0
 - Initial commit.
 
