@@ -1,6 +1,6 @@
 {
   "name": "jni_davinci_local_bridge",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A simple API to bridge the communication to open AI services to be used as a Siri shortcut (as an example).",
   "main": "App.ts",
   "type": "module",
@@ -41,6 +41,7 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "mqtt": "^4.3.7",
     "openai": "^3.1.0"
   }
 }

@@ -58,6 +58,9 @@ The VS Code launch config (.vscode/launch.json) and the provided docker compose 
 
 # Release History
 
+## v0.2.0
+- Addapt to new shared types.
+
 ## v0.1.2
 - Provide install script compatible npm script name.
 
