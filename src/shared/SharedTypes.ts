@@ -14,6 +14,7 @@ export type AlertEvent = {
 export type CommandRegistration = {
 	service: string,
 	command: string,
+	commandAlternatives: string[] | undefined,
 	extendable: boolean,
 	description: string,
 }
