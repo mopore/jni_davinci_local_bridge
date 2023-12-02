@@ -14,6 +14,7 @@ export class MqttServerConnection {
 	private _reconnecting = false;
 	private _connectionLosses = 0;
 	private _connectionLostTimestamp = -1;
+	private _exitRequested = false;
 
 
 	constructor(mqttServerUrl: string){
@@ -118,7 +119,9 @@ export class MqttServerConnection {
 			const errorMessage = `Error publishing: ${error}`;
 			console.error(errorMessage);
 			console.trace();
-			throw new Error(errorMessage);
+			if (!this._exitRequested){
+				throw new Error(errorMessage);
+			}
 		});
 	}
 
@@ -151,7 +154,9 @@ export class MqttServerConnection {
 			const errorMessage = `Error subscribing: ${error}`;
 			console.error(errorMessage);
 			console.trace();
-			throw new Error(errorMessage);
+			if (!this._exitRequested){
+				throw new Error(errorMessage);
+			}
 		});
 	}
 
@@ -196,7 +201,8 @@ export class MqttServerConnection {
 	 * This will close the connection to the MQTT server. The client will not be usable anymore.
 	 */
 	exit(): void {
-		console.log("Shutdown for MQTT helper requested...");
+		console.log("Shutdown for MQTT Server Connection requested...");
+		this._exitRequested = true;
 		try {
 			this.checkClientAndConnection();
 		}
@@ -211,7 +217,7 @@ export class MqttServerConnection {
 				this._client.end();
 			}
 			catch (error) {
-				const errorMessage = `Error calling "end" on MqttClient: ${error}`;
+				const errorMessage = `Error calling "end" on MQTT client: ${error}`;
 				console.error(errorMessage);
 				console.trace();
 			}

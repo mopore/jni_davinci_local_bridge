@@ -46,7 +46,9 @@ export class AliveTicker {
 
 	private sendAliveMessage(): void{
 		try{
-			this._mqttConnection.publish(this._topicName, "ALIVE");
+			if (this._keepAlive) {
+				this._mqttConnection.publish(this._topicName, "ALIVE");
+			}
 		}
 		catch(error){
 			console.error(`Error sending alive tick: ${error}`);
