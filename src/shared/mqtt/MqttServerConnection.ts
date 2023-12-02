@@ -197,10 +197,24 @@ export class MqttServerConnection {
 	 */
 	exit(): void {
 		console.log("Shutdown for MQTT helper requested...");
-		this.checkClientAndConnection();
+		try {
+			this.checkClientAndConnection();
+		}
+		catch (error) {
+			const errorMessage = `Errors decteted before exiting MqttServerConnection: ${error}`;
+			console.error(errorMessage);
+			console.trace();
+		}
 		if (this._client){
 			this._connected = false;
-			this._client.end();
+			try {
+				this._client.end();
+			}
+			catch (error) {
+				const errorMessage = `Error calling "end" on MqttClient: ${error}`;
+				console.error(errorMessage);
+				console.trace();
+			}
 		}
 	}
 
