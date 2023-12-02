@@ -28,7 +28,12 @@ export class AliveTicker {
 			setTimeout(this.tick.bind(this), ONE_SEC_IN_MS);
 		}
 		else {
-			this._mqttConnection.publish(this._topicName, "DEAD");
+			try{
+				this._mqttConnection.publish(this._topicName, "DEAD");
+			}
+			catch(error){
+				console.error(`Error sending dead tick: ${error}`);
+			}
 		}
 		this._secCounter++;
 	}
@@ -40,6 +45,11 @@ export class AliveTicker {
 
 
 	private sendAliveMessage(): void{
-		this._mqttConnection.publish(this._topicName, "ALIVE");
+		try{
+			this._mqttConnection.publish(this._topicName, "ALIVE");
+		}
+		catch(error){
+			console.error(`Error sending alive tick: ${error}`);
+		}
 	}
 }
