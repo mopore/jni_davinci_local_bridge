@@ -105,6 +105,9 @@ export class MqttServerConnection {
 	 * @param message 
 	 */
 	async publishAsync(topic: string, message: string): Promise<void>{
+		if (this._exitRequested){
+			return;
+		}
 		try {
 			// Wait max 3 seconds before subscribing to the topic if not connected.
 			const startTime = Date.now();
