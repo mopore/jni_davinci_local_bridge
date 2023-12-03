@@ -16,7 +16,15 @@ export class ServiceFrame {
 		this._mqttConnection = new MqttServerConnection(_mqttServerUrl);
 	}
 
-	attachService(service: IService): void{
+	
+	/**
+	 * Initializes the service frame with the given service.
+	 * The init method of the service will be called with this service frame as parameter. 
+	 * This method will also start an AliveTicker and a listener for exit and reset commands.
+	 * The method should be called for initial setup and will be called by the frame for a potential reset.
+	 * @param service 
+	 */
+	initFrame(service: IService): void{
 		this._service = service;
 		this._ticker = new AliveTicker(this._mqttConnection,service.getServiceName());
 		new ExitResetListener(this._mqttConnection, service.getServiceName(), this);
@@ -81,8 +89,7 @@ export class ServiceFrame {
 		try{
 			this._mqttConnection = new MqttServerConnection(this._mqttServerUrl);
 			if (this._service){
-				this.attachService(this._service);
-				this._service.init(this);
+				this.initFrame(this._service);
 			}
 		}
 		catch(error){
