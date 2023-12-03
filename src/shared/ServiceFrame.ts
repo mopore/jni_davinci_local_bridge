@@ -52,13 +52,13 @@ export class ServiceFrame {
 		if (this._ticker){
 			this._ticker.exit();
 		}
-		setTimeout( this.endWorldInFiveSeconds.bind(this), FIVE_SEC);
+		setTimeout( this.endServiceInFiveSeconds.bind(this), FIVE_SEC);
 	}
 
-	private endWorldInFiveSeconds(): void {
+	private endServiceInFiveSeconds(): void {
 		this._mqttConnection.exit();
 		if (this._service){
-			console.error(`Will exit the process for serivce ${this._service.getServiceName()}`);	
+			console.error(`Will exit the process for service "${this._service.getServiceName()}"`);	
 		}
         process.exit();
     }
@@ -80,12 +80,12 @@ export class ServiceFrame {
 			this._ticker = undefined;
 		}
 		this.mqttConnection.exit();
-		setTimeout( this.ressurectWorldInFiveSeconds.bind(this), FIVE_SEC);
+		setTimeout( this.resettingInFiveSeconds.bind(this), FIVE_SEC);
 	}
 
 
-	private ressurectWorldInFiveSeconds(): void {
-		console.log("Ressurecting world...")
+	private resettingInFiveSeconds(): void {
+		console.log("Resetting service...")
 		try{
 			this._mqttConnection = new MqttServerConnection(this._mqttServerUrl);
 			if (this._service){
@@ -93,7 +93,7 @@ export class ServiceFrame {
 			}
 		}
 		catch(error){
-			console.error(`Error while ressurecting world:`);
+			console.error(`Error while resetting world:`);
 			console.error(error);
 			console.trace();
 			this.exit();
