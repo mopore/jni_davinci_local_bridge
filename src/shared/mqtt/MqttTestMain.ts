@@ -29,13 +29,13 @@ console.log("Starting...");
 		await sleep(100);
 	}
 
-	client.subscribe(MQTT_TEST_TOPIC, handler);
+	client.subscribeAsync(MQTT_TEST_TOPIC, handler);
 	const testType: TestType = {
 		name: "MqttTestMain",
 		value: "Initial value"
 	}
 	const testMessage = JSON.stringify(testType);
-	client.publish(MQTT_TEST_TOPIC, testMessage);
+	client.publishAsync(MQTT_TEST_TOPIC, testMessage);
 
 	// Simulate a clean exit after a minute
 	console.log("Will shutdown after one minute...");

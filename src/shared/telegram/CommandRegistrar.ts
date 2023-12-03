@@ -20,9 +20,15 @@ export class CommandRegistrar {
 	}
 
 
-	private registerCommands(): void {
+	private async registerCommands(): Promise<void> {
 		const commandsMessage = JSON.stringify(this._commandRegistrations);
-		this._mqttConnection.publish(REGISTER_COMMANDS_TOPIC_NAME, commandsMessage);
+		try {
+			await this._mqttConnection.publishAsync(REGISTER_COMMANDS_TOPIC_NAME, commandsMessage);
+		}
+		catch(error){
+			console.error(`Error registering commands via MQTT server: ${error}`);
+			console.trace();
+		}
 	}
 
 

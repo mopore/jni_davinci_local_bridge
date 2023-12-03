@@ -10,10 +10,8 @@ export class TelegramMessenger{
 	){
 	}
 
-	message(message: string): void{
+	async sendAsync(message: string): Promise<void>{
 		console.log(`Posting telegram message: ${message}`);
-		this._mqttConnection.publish(TOPIC_TELEGRAM_SEND_MESSAGE, message);
+		await this._mqttConnection.publishAsync(TOPIC_TELEGRAM_SEND_MESSAGE, message);
 	}
-
-
 }

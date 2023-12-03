@@ -13,7 +13,7 @@ export class ExitResetListener {
 		frame: ServiceFrame
 	){
 		const topicName = `jniHome/services/${serviceName}/command`;
-		mqttConnection.subscribe(topicName, message => {
+		mqttConnection.subscribeAsync(topicName, message => {
 			const cleanedMessage = message.trim().toLowerCase();
 			if (EXIT_COMMAND === cleanedMessage){
 				console.info("Exit/Reset Listener received 'exit' command.");

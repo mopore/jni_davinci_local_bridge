@@ -7,7 +7,6 @@ const sleep = async (ms: number): Promise<void> =>{
 const THREE_SECS = 3000;
 export class MqttServerConnection {
 
-
 	private _client: Client | undefined;
 	private _connected = false;
 	private _firstConnectionAttempt = true;
@@ -15,6 +14,7 @@ export class MqttServerConnection {
 	private _connectionLosses = 0;
 	private _connectionLostTimestamp = -1;
 	private _exitRequested = false;
+	private _errorState = false;
 
 
 	constructor(mqttServerUrl: string){
@@ -104,25 +104,27 @@ export class MqttServerConnection {
 	 * @param topic The topic to publish to
 	 * @param message 
 	 */
-	publish(topic: string, message: string): void{
-		Promise.resolve().then(async () => {
+	async publishAsync(topic: string, message: string): Promise<void>{
+		try {
 			// Wait max 3 seconds before subscribing to the topic if not connected.
 			const startTime = Date.now();
-			while (!this._connected){
+			while (!this._connected) {
 				await sleep(100);
 				const timeDiff = Date.now() - startTime;
-				if (timeDiff > THREE_SECS)
-					break
+				if (timeDiff > THREE_SECS) {
+					throw new Error('Client not connected within 3 seconds');
+				}
 			}
 			this._publish(topic, message);
-		}).catch(error => {
+		} catch (error) {
+			this._errorState = true;
 			const errorMessage = `Error publishing: ${error}`;
 			console.error(errorMessage);
 			console.trace();
-			if (!this._exitRequested){
+			if (!this._exitRequested) {
 				throw new Error(errorMessage);
 			}
-		});
+		}
 	}
 
 
@@ -139,8 +141,8 @@ export class MqttServerConnection {
 	 * @param topic The topic to subscribe to
 	 * @param handler 
 	 */
-	subscribe(topic: string, handler: (message: string, topic?: string) => void): void{
-		Promise.resolve().then(async () => {
+	async subscribeAsync(topic: string, handler: (message: string, topic?: string) => void): Promise<void>{
+		try{
 			// Wait max 3 seconds before subscribing to the topic if not connected.
 			const startTime = Date.now();
 			while (!this._connected){
@@ -150,16 +152,16 @@ export class MqttServerConnection {
 					break
 			}
 			this._subscribe(topic, handler);
-		}).catch(error => {
+		} catch (error) {
+			this._errorState = true;
 			const errorMessage = `Error subscribing: ${error}`;
 			console.error(errorMessage);
 			console.trace();
 			if (!this._exitRequested){
 				throw new Error(errorMessage);
 			}
-		});
+		};
 	}
-
 
 	private _subscribe(topic: string, handler: (message: string, topic?: string) => void): void{
 		this.checkClientAndConnection();

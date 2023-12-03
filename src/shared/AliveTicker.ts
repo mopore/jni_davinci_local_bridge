@@ -19,7 +19,7 @@ export class AliveTicker {
 	}
 
 
-	private tick(): void{
+	private async tick(): Promise<void>{
 		if (this._secCounter === PULLING_INTERVAL_IN_SECS){
 			this.sendAliveMessage();
 			this._secCounter = 0;
@@ -29,7 +29,7 @@ export class AliveTicker {
 		}
 		else {
 			try{
-				this._mqttConnection.publish(this._topicName, "DEAD");
+				await this._mqttConnection.publishAsync(this._topicName, "DEAD");
 			}
 			catch(error){
 				console.error(`Error sending dead tick: ${error}`);
@@ -47,7 +47,7 @@ export class AliveTicker {
 	private sendAliveMessage(): void{
 		try{
 			if (this._keepAlive) {
-				this._mqttConnection.publish(this._topicName, "ALIVE");
+				this._mqttConnection.publishAsync(this._topicName, "ALIVE");
 			}
 		}
 		catch(error){
