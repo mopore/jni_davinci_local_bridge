@@ -26,7 +26,7 @@ export class ServiceFrame {
 	 * The method should be called for initial setup and will be called by the frame for a potential reset.
 	 * @param service 
 	 */
-	async initFrame(service: IService): Promise<void>{
+	async initFrameAsync(service: IService): Promise<void>{
 		try {
 			await this._mqttConnection.connectAndWaitAsync(TWENTY_MIN_IN_MILLIES);
 		}
@@ -101,7 +101,7 @@ export class ServiceFrame {
 			if (!this._service){
 				throw new Error("No service available for reset.");
 			}
-			await this.initFrame(this._service);
+			await this.initFrameAsync(this._service);
 		}
 		catch(error){
 			console.error(`Error while resetting service:`);
