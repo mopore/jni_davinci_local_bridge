@@ -21,8 +21,15 @@ export class AliveTicker {
 
 	private async tick(): Promise<void>{
 		if (this._keepAlive && this._secCounter === PULLING_INTERVAL_IN_SECS){
-			this.sendAliveMessage();
-			this._secCounter = 0;
+			try {
+				await this._mqttConnection.publishAsync(this._topicName, "ALIVE");
+				this._secCounter = 0;
+			}
+			catch (error){
+				console.error(`Error sending alive tick: ${error}`);
+				console.trace();
+				// FIXME Handle error with MQTT alive publishing
+			}
 		}
 		if (this._keepAlive){
 			setTimeout(this.tick.bind(this), ONE_SEC_IN_MS);
@@ -39,14 +46,4 @@ export class AliveTicker {
 	}
 
 
-	private sendAliveMessage(): void{
-		try{
-			if (this._keepAlive) {
-				this._mqttConnection.publishAsync(this._topicName, "ALIVE");
-			}
-		}
-		catch(error){
-			console.error(`Error sending alive tick: ${error}`);
-		}
-	}
 }
