@@ -24,10 +24,8 @@ console.log("Starting...");
 	const mqttServerUrl = "mqtt://localhost:1883";
 	const client = new MqttServerConnection(mqttServerUrl)
 
-	console.log("Waiting for connection...");
-	while(! client.connected) {
-		await sleep(100);
-	}
+	console.log("Will wait 3 seconds for connection...");
+	await client.connectAndWaitAsync(3000);
 
 	client.subscribeAsync(MQTT_TEST_TOPIC, handler);
 	const testType: TestType = {

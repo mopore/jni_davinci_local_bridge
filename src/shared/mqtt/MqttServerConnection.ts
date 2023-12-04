@@ -14,13 +14,17 @@ export class MqttServerConnection {
 	private _connectionLosses = 0;
 	private _connectionLostTimestamp = -1;
 	private _exitRequested = false;
-	private _errorState = false;
 
 
-	constructor(mqttServerUrl: string){
-		console.log(`Connecting to MQTT server via "${mqttServerUrl}"...`);
+	constructor(
+		private readonly _mqttServerUrl: string
+	){
+	}
+	 
+	private async connectAsync(): Promise<void> {
+		console.log(`Connecting to MQTT server via "${this._mqttServerUrl}"...`);
 		try {
-			this._client = MQTT.connect(mqttServerUrl, {
+			this._client = MQTT.connect(this._mqttServerUrl, {
 				connectTimeout: 10000,
 				keepalive: 60,
 			});
@@ -41,12 +45,15 @@ export class MqttServerConnection {
 				}
 			});
 
-			// Will be called every second when the client is connected (default value)
+			// Will be called AFTER failed connect attempt 
 			this._client.on("reconnect", () => {
+				if (this._firstConnectionAttempt){
+					return;
+				}
 				if (this._reconnecting === false) {
 					this._connectionLosses++;
 					console.error(`Connection loss No. ${this._connectionLosses}`);
-					console.log("Reconnecting to MQTT server due to...");
+					console.log("Reconnecting to MQTT...");
 					this._reconnecting = true;
 					this._connectionLosses++;
 					this._connectionLostTimestamp = Date.now();
@@ -54,18 +61,13 @@ export class MqttServerConnection {
 			});
 
 			// Will be called each often (e.g. a reconnect attempt fails (every second))
-			this._client.on("error", (error) => {
+			this._client.on("error", (_) => {
 				if (this._firstConnectionAttempt) {
 					this._connected = false;
-					const errorMessage = 
-						`Can not establish first connection to MQTT broker ${mqttServerUrl}`;
-					console.error(errorMessage);
-					console.trace();
-					throw new Error(errorMessage);
 				}
 				if (this._connected){
 					this._connected = false;
-					console.error(error.message);
+					console.error( "Connection to MQTT server lost!");
 					console.trace();
 				}
 			});
@@ -88,6 +90,20 @@ export class MqttServerConnection {
 			}
 			console.error(`Error connecting to MQTT server: ${message}`);
 			console.trace();
+		}
+	}
+
+	async connectAndWaitAsync(waitTimeMillis: number): Promise<void> {
+		const startTime = Date.now();
+		await this.connectAsync();
+		console.log(`Waiting ${waitTimeMillis} millis for connection...`);
+		while(! this._connected) {
+			await sleep(100);
+			const timeDiff = Date.now() - startTime;
+			if (timeDiff > waitTimeMillis) {
+				this._client?.end();
+				throw new Error(`Client not connected within ${waitTimeMillis} milliseconds`);
+			}
 		}
 	}
 
@@ -120,7 +136,6 @@ export class MqttServerConnection {
 			}
 			this._publish(topic, message);
 		} catch (error) {
-			this._errorState = true;
 			const errorMessage = `Error publishing: ${error}`;
 			console.error(errorMessage);
 			console.trace();
@@ -156,7 +171,6 @@ export class MqttServerConnection {
 			}
 			this._subscribe(topic, handler);
 		} catch (error) {
-			this._errorState = true;
 			const errorMessage = `Error subscribing: ${error}`;
 			console.error(errorMessage);
 			console.trace();

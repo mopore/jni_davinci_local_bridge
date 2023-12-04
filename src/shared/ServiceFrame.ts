@@ -4,6 +4,8 @@ import { IService } from "./IService.js";
 import { MqttServerConnection } from "./mqtt/MqttServerConnection.js";
 
 const FIVE_SEC = 5000;
+const TWENTY_MIN_IN_MILLIES = 20 * 60 * 1000;
+
 export class ServiceFrame {
 
 	private _mqttConnection: MqttServerConnection;
@@ -24,9 +26,17 @@ export class ServiceFrame {
 	 * The method should be called for initial setup and will be called by the frame for a potential reset.
 	 * @param service 
 	 */
-	initFrame(service: IService): void{
+	async initFrame(service: IService): Promise<void>{
+		try {
+			await this._mqttConnection.connectAndWaitAsync(TWENTY_MIN_IN_MILLIES);
+		}
+		catch (error) {
+			const errMessage = `Could not establish essential connection to MQTT server: ${error}`;
+			console.error(errMessage);
+			throw new Error(errMessage);
+		}
 		this._service = service;
-		this._ticker = new AliveTicker(this._mqttConnection,service.getServiceName());
+		this._ticker = new AliveTicker(this._mqttConnection, service.getServiceName());
 		new ExitResetListener(this._mqttConnection, service.getServiceName(), this);
 		this._service.init(this);
 	}
@@ -84,16 +94,17 @@ export class ServiceFrame {
 	}
 
 
-	private resettingInFiveSeconds(): void {
+	private async resettingInFiveSeconds(): Promise<void> {
 		console.log("Resetting service...")
 		try{
 			this._mqttConnection = new MqttServerConnection(this._mqttServerUrl);
-			if (this._service){
-				this.initFrame(this._service);
+			if (!this._service){
+				throw new Error("No service available for reset.");
 			}
+			await this.initFrame(this._service);
 		}
 		catch(error){
-			console.error(`Error while resetting world:`);
+			console.error(`Error while resetting service:`);
 			console.error(error);
 			console.trace();
 			this.exit();
