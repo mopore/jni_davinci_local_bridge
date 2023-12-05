@@ -36,7 +36,7 @@ export class ServiceFrame {
 			throw new Error(errMessage);
 		}
 		this._service = service;
-		this._ticker = new AliveTicker(this._mqttConnection, service.getServiceName());
+		this._ticker = new AliveTicker(this, service.getServiceName());
 		new ExitResetListener(this._mqttConnection, service.getServiceName(), this);
 		this._service.init(this);
 	}

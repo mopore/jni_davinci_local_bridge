@@ -131,7 +131,7 @@ export class MqttServerConnection {
 				await sleep(100);
 				const timeDiff = Date.now() - startTime;
 				if (timeDiff > THREE_SECS) {
-					throw new Error('Client not connected within 3 seconds');
+					throw new Error('Client not available for 3 seconds.');
 				}
 			}
 			this._publish(topic, message);
