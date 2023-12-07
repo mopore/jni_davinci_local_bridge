@@ -21,7 +21,7 @@ export class ExitResetListener {
 			}
 			else if(RESET_COMMAND === cleanedMessage){
 				console.info("Exit/Reset Listener received 'reset' command.");
-				frame.reset();
+				frame.reset("Request by command over MQTT.");
 			}
 		});
 	}

@@ -19,7 +19,7 @@ export class TelegramMessenger{
 		catch (error){
 			console.error(`Requesting reset after error sending telegram message via MQTT: ${error}`);
 			console.trace();
-			this._frame.reset();
+			this._frame.reset("MQTT error when sending telegram message.");
 		}
 	}
 }

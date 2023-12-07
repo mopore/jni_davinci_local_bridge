@@ -11,6 +11,7 @@ export class ServiceFrame {
 	private _mqttConnection: MqttServerConnection;
 	private _ticker: AliveTicker | undefined;
 	private _service: IService | undefined;
+	private _resetReason: string | undefined;
 
 	constructor(
 		private readonly _mqttServerUrl: string,
@@ -29,6 +30,10 @@ export class ServiceFrame {
 	async initFrameAsync(service: IService): Promise<void>{
 		try {
 			await this._mqttConnection.connectAndWaitAsync(TWENTY_MIN_IN_MILLIES);
+			if (this._resetReason){
+				// FIXME Alert the services what resetted due to a reason.
+				this._resetReason = undefined;
+			}
 		}
 		catch (error) {
 			const errMessage = `Could not establish essential connection to MQTT server: ${error}`;
@@ -73,9 +78,12 @@ export class ServiceFrame {
         process.exit();
     }
 
-	reset(): void {
+	reset(reason: string): void {
+		this._resetReason = reason;
 		if (this._service) {
-			console.error(`Initiating reset for service "${this._service.getServiceName()}"`);
+			const  msg = `Initiating reset for service "${this._service.getServiceName()}" for ` +
+				`reason: "${reason}"`;
+			console.error(msg);
 			try {
 				this._service.onReset();
 			}

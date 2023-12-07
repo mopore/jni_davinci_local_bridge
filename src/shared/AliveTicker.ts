@@ -39,7 +39,7 @@ export class AliveTicker {
 					const errMessage = "Requesting reset after alive tick failed 3 times.";
 					console.error(errMessage);
 					console.trace();
-					this._frame.reset();
+					this._frame.reset("Alive tick could not be send.");
 				}
 			}
 		}
