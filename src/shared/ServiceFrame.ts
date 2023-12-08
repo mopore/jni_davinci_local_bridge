@@ -31,7 +31,12 @@ export class ServiceFrame {
 		try {
 			await this._mqttConnection.connectAndWaitAsync(TWENTY_MIN_IN_MILLIES);
 			if (this._resetReason){
-				// FIXME Alert the services what resetted due to a reason.
+				const msg = `ServiceFrame.initFrameAsync was invoked after a reset with reason: ` +
+					`"${this._resetReason}"`;
+				console.log(msg);
+				const alertMsg = `Service "${service.getServiceName()}" was reset for reason: ` +
+					`"${this._resetReason}"`;
+				// FIXME Alert reset and its reason.
 				this._resetReason = undefined;
 			}
 		}
