@@ -4,9 +4,8 @@ import { IService } from "./IService.js";
 import { MqttServerConnection } from "./mqtt/MqttServerConnection.js";
 import { AlertEvent } from "./SharedTypes.js";
 import { sharedTopics } from "./SharedTopics.js";
-import { optionalResolve, Option } from "./optional/optional.js";
 
-const FIVE_SEC = 5000;
+const FIVE_SECS = 5000;
 const TWENTY_MIN_IN_MILLIES = 20 * 60 * 1000;
 
 export class ServiceFrame {
@@ -25,9 +24,9 @@ export class ServiceFrame {
 	
 	/**
 	 * Initializes the service frame with the given service.
-	 * The init method of the service will be called with this service frame as parameter. 
 	 * This method will also start an AliveTicker and a listener for exit and reset commands.
 	 * The method should be called for initial setup and will be called by the frame for a potential reset.
+	 * If a reset has happened, the reset reason will be alerted to briefing service after 5 seconds.
 	 * @param service 
 	 */
 	async initFrameAsync(service: IService): Promise<void>{
@@ -44,21 +43,7 @@ export class ServiceFrame {
 			const msg = `ServiceFrame.initFrameAsync was invoked after a reset with reason: ` +
 				`"${this._resetReason}"`;
 			console.log(msg);
-
-			try{
-				await this.alertAsync(
-					`${service.getServiceName()} Reset`,
-					`Service "${service.getServiceName()}" was reset for reason: `,
-					true,
-				);
-			}
-			catch (error){
-				const errMessage = `Could not alert reset reason for service "${service.getServiceName()}": ${error}`
-				console.error(errMessage);
-				console.trace();
-				throw new Error(errMessage);
-			}
-			this._resetReason = undefined;
+			setTimeout( this.alertResetReasonAfterResetAsync.bind(this), FIVE_SECS);
 		}
 
 		this._service = service;
@@ -92,7 +77,7 @@ export class ServiceFrame {
 		if (this._ticker){
 			this._ticker.exit();
 		}
-		setTimeout( this.endServiceInFiveSeconds.bind(this), FIVE_SEC);
+		setTimeout( this.endServiceInFiveSeconds.bind(this), FIVE_SECS);
 	}
 
 	private endServiceInFiveSeconds(): void {
@@ -130,7 +115,7 @@ export class ServiceFrame {
 			this._ticker = undefined;
 		}
 		this.mqttConnection.exit();
-		setTimeout( this.resettingInFiveSeconds.bind(this), FIVE_SEC);
+		setTimeout( this.resettingInFiveSeconds.bind(this), FIVE_SECS);
 	}
 	
 	/**
@@ -175,4 +160,37 @@ export class ServiceFrame {
 			this.exit();
 		}
 	}
+
+	private async alertResetReasonAfterResetAsync(): Promise<void> {
+		const serviceName = this._service?.getServiceName();
+		const reason = this._resetReason;
+		if (!serviceName){
+			const errMessage = `Did not have a service to alert reset reason "${reason}"`;
+			console.error(errMessage);
+			console.trace();
+			throw new Error(errMessage);
+		}
+		if (!reason){
+			const errMessage = `Did not have a reset reason to alert for service "${serviceName}"`;
+			console.error(errMessage);
+			console.trace();
+			throw new Error(errMessage);
+		}
+		try{
+			console.log(`Alerting reset reason after reset for service "${serviceName}"`);
+			await this.alertAsync(
+				`${serviceName} Reset`,
+				`Service "${serviceName}" was reset for reason: ${reason}`,
+				true,
+			);
+			this._resetReason = undefined;
+		}
+		catch (error){
+			const errMessage = `Could not alert reset reason for service "${serviceName}": ${error}`
+			console.error(errMessage);
+			console.trace();
+			throw new Error(errMessage);
+		}
+	}
+
 }
