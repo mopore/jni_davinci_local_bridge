@@ -10,15 +10,20 @@ export class TelegramMessenger{
 	){
 	}
 
+	/**
+	 * Sends a message to the JNI via the telegram bot.
+	 * This uses MQTT and throws an error if the message could not be sent. 
+	 * @param message The message to send to JNI via the telegram bot.
+	 */
 	async sendAsync(message: string): Promise<void>{
 		console.log(`Posting telegram message via MQTT: ${message}`);
 		try {
 			await this._frame.mqttConnection.publishAsync(sharedTopics.TELEGRAM_SEND, message);
 		}
-		catch (error){
-			console.error(`Requesting reset after error sending telegram message via MQTT: ${error}`);
+		catch(error){
+			console.error(`Error sending telegram message via MQTT: ${error}`);
 			console.trace();
-			this._frame.reset("MQTT error when sending telegram message.");
+			throw error;
 		}
 	}
 }

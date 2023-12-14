@@ -28,6 +28,8 @@ export class CommandRegistrar {
 		catch(error){
 			console.error(`Error registering commands via MQTT server: ${error}`);
 			console.trace();
+			// We can accept this error. The Alive Ticker will trigger a reset of the service
+			// anyway if the MQTT server is not available.
 		}
 	}
 
