@@ -58,6 +58,9 @@ The VS Code launch config (.vscode/launch.json) and the provided docker compose 
 
 # Release History
 
+## v0.3.0 (Untagged)
+- Move to node 20.
+
 ## v0.2.0
 - Addapt to new shared types.
 
