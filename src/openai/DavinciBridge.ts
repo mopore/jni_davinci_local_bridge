@@ -1,29 +1,35 @@
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 
 
 export class DavinciBridge {
 
-	private _openAiApi: OpenAIApi;
+	private _openAIApi: OpenAI;
 
 	constructor(
 		apiKey: string
 	){
-		const config = new Configuration({
-			apiKey: apiKey
+		this._openAIApi = new OpenAI({
+			apiKey: apiKey,
 		});
-		this._openAiApi = new OpenAIApi(config);
 	}
 
 	async request(prompt: string): Promise<string> {
 		let responseText: string | undefined;
 		try{
-			const response = await this._openAiApi.createCompletion({
-				model: "text-davinci-003",
-				prompt: prompt,
-				max_tokens: 300,
-				temperature: .8,
+			const completion = await this._openAIApi.chat.completions.create({
+				model: "gpt-3.5-turbo",
+				messages: [
+					{
+						"role": "user",
+						"content": prompt
+					}
+				]
 			});
-			responseText = response.data.choices[0].text;
+			const rawInput = completion.choices[0].message?.content;
+			if (!rawInput) {
+				throw new Error("Response from OpenAI API was empty");
+			}
+			responseText = String(rawInput);
 		}
 		catch (error) {
 			console.error(`Error requesting response from Open AI: ${error}`);

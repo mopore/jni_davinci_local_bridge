@@ -92,11 +92,20 @@ export class ServiceFrame {
 	/**
 	 * Resets the service frame. This will call the onReset method of the service. And tries to to
 	 * close all connection to MQTT server. After 5 seconds the initFrameAsync method will be called.
+	 * Another reset will be ignored if a reset is already in progress.
 	 * It will wait up to 20 minutes for a MQTT connection. After a successful connection the the
 	 * briefing service will be called to inform about the reset.
 	 * @param reason The reason for the reset.
 	 */
 	reset(reason: string): void {
+		if (this._resetReason !== undefined){
+			const msg = `Reset with reason "${reason}" will be ignored because reset with reason ` +
+				`"${this._resetReason}" is already in progress.`;
+			console.error(msg);
+			console.trace();
+			return;
+		}
+
 		this._resetReason = reason;
 		if (this._service) {
 			const  msg = `Initiating reset for service "${this._service.getServiceName()}" for ` +
