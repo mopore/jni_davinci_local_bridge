@@ -14,7 +14,7 @@ module.exports = {
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2019,
+        "ecmaVersion": 2022,
         "sourceType": "module",
         "ecmaFeatures": {
           "modules": true
@@ -37,5 +37,6 @@ module.exports = {
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/consistent-type-assertions": "warn",
         "@typescript-eslint/restrict-template-expressions": "off",
+        "@typescript-eslint/no-floating-promises": "error",
     }
 }

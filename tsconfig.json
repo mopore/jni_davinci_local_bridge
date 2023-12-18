@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2022",
     "module": "NodeNext",
     "allowJs": true,
     "sourceMap": true,
@@ -11,7 +11,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,  
     "skipLibCheck": true, // This should improve preformance.
-    "noImplicitOverride": true
+    "noImplicitOverride": true,
+    "strictNullChecks": true
   },
   "include": [
     "./src/**/*", "./test/**/*", 
