@@ -43,7 +43,7 @@ export class ServiceFrame {
 			const msg = `ServiceFrame.initFrameAsync was invoked after a reset with reason: ` +
 				`"${this._resetReason}"`;
 			console.log(msg);
-			setTimeout( this.alertResetReasonAfterResetAsync.bind(this), FIVE_SECS);
+			setTimeout( this.alertResetReasonAfterReset.bind(this), FIVE_SECS);
 		}
 
 		this._service = service;
@@ -154,53 +154,61 @@ export class ServiceFrame {
 		}
 	}
 
-	private async resettingInFiveSeconds(): Promise<void> {
-		console.log("Resetting service...")
-		try{
+	private resettingInFiveSeconds(): void{
+		const asyncFunc = async (): Promise<void> => {
+			console.log("Resetting service...")
 			this._mqttConnection = new MqttServerConnection(this._mqttServerUrl);
 			if (!this._service){
 				throw new Error("No service available for reset.");
 			}
 			await this.initFrameAsync(this._service);
 		}
-		catch(error){
+		asyncFunc().catch(error => {
 			console.error(`Error while resetting service:`);
 			console.error(error);
 			console.trace();
 			this.exit();
-		}
+		});
 	}
 
-	private async alertResetReasonAfterResetAsync(): Promise<void> {
-		const serviceName = this._service?.getServiceName();
-		const reason = this._resetReason;
-		if (!serviceName){
-			const errMessage = `Did not have a service to alert reset reason "${reason}"`;
-			console.error(errMessage);
+	private alertResetReasonAfterReset(): void {
+		const asyncFunc = async (): Promise<void> => {
+			const serviceName = this._service?.getServiceName();
+			const reason = this._resetReason;
+			if (!serviceName){
+				const errMessage = `Did not have a service to alert reset reason "${reason}"`;
+				console.error(errMessage);
+				console.trace();
+				throw new Error(errMessage);
+			}
+			if (!reason){
+				const errMessage = `Did not have a reset reason to alert for service "${serviceName}"`;
+				console.error(errMessage);
+				console.trace();
+				throw new Error(errMessage);
+			}
+			try{
+				console.log(`Alerting reset reason after reset for service "${serviceName}"`);
+				await this.alertAsync(
+					`${serviceName} Reset`,
+					`Service "${serviceName}" was reset for reason: ${reason}`,
+					true,
+				);
+				this._resetReason = undefined;
+			}
+			catch (error){
+				const errMessage = `Could not alert reset reason for service "${serviceName}": ${error}`
+				console.error(errMessage);
+				console.trace();
+				throw new Error(errMessage);
+			}
+		}
+		asyncFunc().catch(error => {
+			const errMsg = `Panicing since alerting reason after reset faild: ${error}`;
+			console.error(errMsg);
 			console.trace();
-			throw new Error(errMessage);
-		}
-		if (!reason){
-			const errMessage = `Did not have a reset reason to alert for service "${serviceName}"`;
-			console.error(errMessage);
-			console.trace();
-			throw new Error(errMessage);
-		}
-		try{
-			console.log(`Alerting reset reason after reset for service "${serviceName}"`);
-			await this.alertAsync(
-				`${serviceName} Reset`,
-				`Service "${serviceName}" was reset for reason: ${reason}`,
-				true,
-			);
-			this._resetReason = undefined;
-		}
-		catch (error){
-			const errMessage = `Could not alert reset reason for service "${serviceName}": ${error}`
-			console.error(errMessage);
-			console.trace();
-			throw new Error(errMessage);
-		}
+			throw new Error(errMsg);
+		});
 	}
 
 }

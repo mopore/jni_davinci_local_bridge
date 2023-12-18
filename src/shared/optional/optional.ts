@@ -6,6 +6,7 @@ export abstract class Option<T> {
 	abstract unwrapExpect(errMessage: string): T;
 }
 
+
 export class None<T> extends Option<T> {
 	_type: 'none' = 'none';
 

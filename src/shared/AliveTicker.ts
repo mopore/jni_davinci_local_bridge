@@ -23,29 +23,37 @@ export class AliveTicker {
 	}
 
 
-	private async tick(): Promise<void>{
-		if (this._keepAlive && this._secCounter === PULLING_INTERVAL_IN_SECS){
-			try {
-				this._secCounter = 0;
-				await this._frame.mqttConnection.publishAsync(this._topicName, "ALIVE");
-				this._failedAliveTicks = 0;
-			}
-			catch (error){
-				this._failedAliveTicks++;
-				const msg = `Error sending alive tick (${this,this._failedAliveTicks} times): ${error}`;
-				console.error(msg);
-				if (this._failedAliveTicks > 2){
-					const errMessage = "Requesting reset after alive tick failed 3 times.";
-					console.error(errMessage);
-					console.trace();
-					this._frame.reset("Alive tick could not be send.");
+	private tick(): void{
+		const asyncFunc = async (): Promise<void> => {
+			if (this._keepAlive && this._secCounter === PULLING_INTERVAL_IN_SECS){
+				try {
+					this._secCounter = 0;
+					await this._frame.mqttConnection.publishAsync(this._topicName, "ALIVE");
+					this._failedAliveTicks = 0;
+				}
+				catch (error){
+					this._failedAliveTicks++;
+					const msg = `Error sending alive tick (${this,this._failedAliveTicks} times): ${error}`;
+					console.error(msg);
+					if (this._failedAliveTicks > 2){
+						const errMessage = "Requesting reset after alive tick failed 3 times.";
+						console.error(errMessage);
+						console.trace();
+						this._frame.reset("Alive tick could not be send.");
+					}
 				}
 			}
+			if (this._keepAlive){
+				setTimeout(this.tick.bind(this), ONE_SEC_IN_MS);
+			}
+			this._secCounter++;
 		}
-		if (this._keepAlive){
-			setTimeout(this.tick.bind(this), ONE_SEC_IN_MS);
-		}
-		this._secCounter++;
+		asyncFunc().catch(error => {
+			const errMsg = `Panincing due to unexpected error in AliveTicker: ${error}`;
+			console.error(errMsg);
+			console.trace();
+			throw new Error(errMsg);
+		});
 	}
 
 

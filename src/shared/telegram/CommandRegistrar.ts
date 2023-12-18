@@ -20,17 +20,17 @@ export class CommandRegistrar {
 	}
 
 
-	private async registerCommands(): Promise<void> {
-		const commandsMessage = JSON.stringify(this._commandRegistrations);
-		try {
+	private registerCommands(): void {
+		const asyncFunc = async (): Promise<void> => {
+			const commandsMessage = JSON.stringify(this._commandRegistrations);
 			await this._mqttConnection.publishAsync(REGISTER_COMMANDS_TOPIC_NAME, commandsMessage);
 		}
-		catch(error){
+		asyncFunc().catch(error => {
 			console.error(`Error registering commands via MQTT server: ${error}`);
 			console.trace();
 			// We can accept this error. The Alive Ticker will trigger a reset of the service
 			// anyway if the MQTT server is not available.
-		}
+		});
 	}
 
 

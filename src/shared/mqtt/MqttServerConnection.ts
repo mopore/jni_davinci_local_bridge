@@ -1,4 +1,4 @@
-import MQTT, { Client } from "mqtt";
+import MQTT, {MqttClient} from "mqtt";
 
 const sleep = async (ms: number): Promise<void> =>{
 	return new Promise( resolve => setTimeout(resolve, ms) );
@@ -7,7 +7,7 @@ const sleep = async (ms: number): Promise<void> =>{
 const THREE_SECS = 3000;
 export class MqttServerConnection {
 
-	private _client: Client | undefined;
+	private _client: MqttClient | undefined;
 	private _connected = false;
 	private _firstConnectionAttempt = true;
 	private _reconnecting = false;
@@ -20,8 +20,8 @@ export class MqttServerConnection {
 		private readonly _mqttServerUrl: string
 	){
 	}
-	 
-	private async connectAsync(): Promise<void> {
+
+	private connectAsync(): void {
 		console.log(`Connecting to MQTT server via "${this._mqttServerUrl}"...`);
 		try {
 			this._client = MQTT.connect(this._mqttServerUrl, {
@@ -61,7 +61,7 @@ export class MqttServerConnection {
 			});
 
 			// Will be called each often (e.g. a reconnect attempt fails (every second))
-			this._client.on("error", (_) => {
+			this._client.on("error", () => {
 				if (this._firstConnectionAttempt) {
 					this._connected = false;
 				}
@@ -95,7 +95,7 @@ export class MqttServerConnection {
 
 	async connectAndWaitAsync(waitTimeMillis: number): Promise<void> {
 		const startTime = Date.now();
-		await this.connectAsync();
+		this.connectAsync();
 		console.log(`Waiting ${waitTimeMillis} millis for connection...`);
 		while(! this._connected) {
 			await sleep(100);
@@ -177,7 +177,7 @@ export class MqttServerConnection {
 			if (!this._exitRequested){
 				throw new Error(errorMessage);
 			}
-		};
+		}
 	}
 
 	private _subscribe(topic: string, handler: (message: string, topic?: string) => void): void{

@@ -23,6 +23,11 @@ export class ExitResetListener {
 				console.info("Exit/Reset Listener received 'reset' command.");
 				frame.reset("Request by command over MQTT.");
 			}
+		}).catch(error => {
+			console.error(`Error subscribing to topic "${topicName}": ${error}`);
+			console.trace();
+			// At this point the seems to a fundamental problem with the MQTT connection.
+			throw new Error(`Error subscribing to topic "${topicName}": ${error}`);
 		});
 	}
 }

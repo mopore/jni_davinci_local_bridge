@@ -27,13 +27,21 @@ console.log("Starting...");
 	console.log("Will wait 3 seconds for connection...");
 	await client.connectAndWaitAsync(3000);
 
-	client.subscribeAsync(MQTT_TEST_TOPIC, handler);
+	client.subscribeAsync(MQTT_TEST_TOPIC, handler).catch(error => {
+		console.error(`Error subscribing to topic "${MQTT_TEST_TOPIC}": ${error}`);
+		console.trace();
+		throw error;
+	});
 	const testType: TestType = {
 		name: "MqttTestMain",
 		value: "Initial value"
 	}
 	const testMessage = JSON.stringify(testType);
-	client.publishAsync(MQTT_TEST_TOPIC, testMessage);
+	client.publishAsync(MQTT_TEST_TOPIC, testMessage).catch(error => {
+		console.error(`Error publishing to topic "${MQTT_TEST_TOPIC}": ${error}`);
+		console.trace();
+		throw error;
+	});
 
 	// Simulate a clean exit after a minute
 	console.log("Will shutdown after one minute...");
