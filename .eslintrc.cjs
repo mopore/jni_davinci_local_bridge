@@ -26,17 +26,23 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "no-unused-vars": "off",
+        "no-unused-vars": ["error", { "vars": "local", "args": "none", "varsIgnorePattern": "^[A-Z]"}],
         "@typescript-eslint/explicit-member-accessibility": "off",
         "@typescript-eslint/explicit-function-return-type": "warn",
         "@typescript-eslint/indent": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-non-null-assertion": "warn",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-non-null-assertion": "error",
         "@typescript-eslint/camelcase": "off",
         "@typescript-eslint/array-type": "warn",
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/consistent-type-assertions": "warn",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/prefer-as-const": "off",
+        "@typescript-eslint/prefer-readonly": "warn",
+        "@typescript-eslint/ban-types": "warn",
+        "@typescript-eslint/prefer-readonly": "warn",
+        "@typescript-eslint/no-use-before-define": "warn",
+        "@typescript-eslint/no-unused-expressions": "warn",
     }
 }

@@ -3,7 +3,7 @@ import OpenAI from "openai";
 
 export class DavinciBridge {
 
-	private _openAIApi: OpenAI;
+	private readonly _openAIApi: OpenAI;
 
 	constructor(
 		apiKey: string

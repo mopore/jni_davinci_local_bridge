@@ -16,7 +16,7 @@ const getBridge = (): DavinciBridge => {
 
 export class Functions {
 
-    private static _bridge: DavinciBridge = getBridge();
+    private static readonly _bridge: DavinciBridge = getBridge();
 
     static apply( app: Express ): void {
 
@@ -38,8 +38,8 @@ export class Functions {
 
         const davinciPath = `/api/davinci`;
         console.log(`Path applied: ${davinciPath}`);
-        app.post(davinciPath, async ( req, resp ) => {
-            try {
+        app.post(davinciPath, ( req, resp ) => {
+            const asyncFunc = async (): Promise<void> => {
                 const now = Date.now();
                 console.log("Request for Davinci API received.")
                 const apiRequest = req.body as ApiRequest;
@@ -50,11 +50,11 @@ export class Functions {
                 console.log(`Time for Davinci request: ${timeInSeconds} seconds`);
                 resp.send( simpleAnswer );
             }
-            catch (error) {
+            asyncFunc().catch( error => {
                 console.error(error);
                 console.trace();
                 return resp.status(400).send({error: String(error)});
-            }
+            });
         });
     }
 
