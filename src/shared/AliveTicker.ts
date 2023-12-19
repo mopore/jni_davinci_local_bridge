@@ -7,11 +7,11 @@ export class AliveTicker {
 
 	private _keepAlive = true;
 	private _secCounter = 10;
-	private _topicName: string;
+	private readonly _topicName: string;
 	private _failedAliveTicks = 0;
 
 	constructor(
-		private _frame: ServiceFrame,
+		private readonly _frame: ServiceFrame,
 		serviceName: string,
 	){
 		console.info(`Setting up Aliveticker for ${serviceName}`);

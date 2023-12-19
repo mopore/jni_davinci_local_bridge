@@ -15,7 +15,7 @@ export class CommandRegistrar {
 
 	constructor( 
 		private _commandRegistrations: CommandRegistration[], 
-		private _mqttConnection: MqttServerConnection){
+		private readonly _mqttConnection: MqttServerConnection){
 		setTimeout(this.tick.bind(this), ONE_SECOND_IN_MILLIS);
 	}
 

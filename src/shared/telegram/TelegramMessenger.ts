@@ -6,7 +6,7 @@ import { sharedTopics } from "../SharedTopics.js";
 export class TelegramMessenger{
 
 	constructor(
-		private _frame: ServiceFrame
+		private readonly _frame: ServiceFrame
 	){
 	}
 
