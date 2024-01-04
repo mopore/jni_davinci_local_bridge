@@ -6,9 +6,9 @@ export abstract class Option<T> {
 	abstract unwrapExpect(errMessage: string): T;
 }
 
-
 export class None<T> extends Option<T> {
-	_type: 'none' = 'none';
+
+	_type = 'none' as const;
 
 	isNone(): this is None<T> {
 		return true;
@@ -38,7 +38,7 @@ export class None<T> extends Option<T> {
 }
 
 export class Some<T> extends Option<T> {
-	_type: 'some' = 'some';
+	_type = 'some' as const;
 
 	constructor(public value: T) {
 		super();

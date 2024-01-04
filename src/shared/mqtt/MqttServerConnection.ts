@@ -1,5 +1,8 @@
 import MQTT, {MqttClient} from "mqtt";
 
+const UNDEFINED_STRING = "undefined" as const;
+
+
 const sleep = async (ms: number): Promise<void> =>{
 	return new Promise( resolve => setTimeout(resolve, ms) );
 }
@@ -19,6 +22,12 @@ export class MqttServerConnection {
 	constructor(
 		private readonly _mqttServerUrl: string
 	){
+		if (_mqttServerUrl === UNDEFINED_STRING){
+			const errMsg = "MQTT server URL is not defined!";
+			console.error(errMsg);
+			console.trace();
+			throw new Error(errMsg);
+		}
 	}
 
 	private connectAsync(): void {
