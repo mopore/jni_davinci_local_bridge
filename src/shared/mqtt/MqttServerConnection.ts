@@ -148,9 +148,7 @@ export class MqttServerConnection {
 			const errorMessage = `Error publishing: ${error}`;
 			console.error(errorMessage);
 			console.trace();
-			if (!this._exitRequested) {
-				throw new Error(errorMessage);
-			}
+			throw new Error(errorMessage);
 		}
 	}
 
