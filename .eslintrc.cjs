@@ -38,11 +38,21 @@ module.exports = {
         "@typescript-eslint/consistent-type-assertions": "warn",
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/no-floating-promises": "error",
-        "@typescript-eslint/prefer-as-const": "off",
+        "@typescript-eslint/prefer-as-const": "warn",
         "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/prefer-readonly": "warn",
         "@typescript-eslint/no-use-before-define": "warn",
         "@typescript-eslint/no-unused-expressions": "warn",
+          "@typescript-eslint/strict-boolean-expressions": ["error", {
+            "allowNumber": false,
+            "allowNullableObject": true,
+            "allowNullableBoolean": false,
+            "allowNullableString": true,
+            "allowNullableNumber": false,
+            "allowAny": false,
+            "allowRuleToRunWithoutStrictNullChecksIKnowWhatIAmDoing": false
+        }],
+        "@typescript-eslint/no-unnecessary-condition": "error",
     }
 }

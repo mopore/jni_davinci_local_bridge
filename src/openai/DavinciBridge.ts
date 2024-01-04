@@ -25,7 +25,7 @@ export class DavinciBridge {
 					}
 				]
 			});
-			const rawInput = completion.choices[0].message?.content;
+			const rawInput = completion.choices[0].message.content;
 			if (!rawInput) {
 				throw new Error("Response from OpenAI API was empty");
 			}
