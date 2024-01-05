@@ -1,9 +1,10 @@
 import { AliveTicker } from "./AliveTicker.js";
 import { ExitResetListener } from "./mqtt/ExitResetListener.js";
 import { IService } from "./IService.js";
-import { MqttServerConnection } from "./mqtt/MqttServerConnection.js";
 import { AlertEvent } from "./SharedTypes.js";
 import { sharedTopics } from "./SharedTopics.js";
+import { log } from "./logger/log.js";
+import { MqttServerConnection } from "./mqtt/MqttServerConnection.js";
 
 const FIVE_SECS = 5000;
 const TWENTY_MIN_IN_MILLIES = 20 * 60 * 1000;
@@ -35,14 +36,14 @@ export class ServiceFrame {
 		}
 		catch (error) {
 			const errMessage = `Could not establish essential connection to MQTT server: ${error}`;
-			console.error(errMessage);
+			log.error(errMessage);
 			throw new Error(errMessage);
 		}
 
 		if (this._resetReason){
 			const msg = `ServiceFrame.initFrameAsync was invoked after a reset with reason: ` +
 				`"${this._resetReason}"`;
-			console.log(msg);
+			log.info(msg);
 			setTimeout( this.alertResetReasonAfterReset.bind(this), FIVE_SECS);
 		}
 
@@ -50,7 +51,7 @@ export class ServiceFrame {
 		this._ticker = new AliveTicker(this, service.getServiceName());
 		new ExitResetListener(this._mqttConnection, service.getServiceName(), this);
 		await this._service.initAsync(this);
-		console.log(`Service "${this._service.getServiceName()}" initialized.`);
+		log.info(`Service "${this._service.getServiceName()}" initialized.`);
 	}
 
 
@@ -65,13 +66,13 @@ export class ServiceFrame {
 	 */
 	exit(): void {
 		if (this._service) {
-			console.error(`Initiating exit for service "${this._service.getServiceName()}"`);
+			log.error(`Initiating exit for service "${this._service.getServiceName()}"`);
 			try {
 				this._service.onExit();
 			}
 			catch(error){
-				console.error(`Error while exiting service "${this._service.getServiceName()}":`);
-				console.error(error);
+				log.error(`Error while exiting service "${this._service.getServiceName()}":`);
+				log.error(error);
 				console.trace();
 			}
 		}
@@ -84,7 +85,7 @@ export class ServiceFrame {
 	private endServiceInFiveSeconds(): void {
 		this._mqttConnection.exit();
 		if (this._service){
-			console.error(`Will exit the process for service "${this._service.getServiceName()}" NOW!!!`);	
+			log.error(`Will exit the process for service "${this._service.getServiceName()}" NOW!!!`);	
 		}
         process.exit();
     }
@@ -101,22 +102,22 @@ export class ServiceFrame {
 		if (this._resetReason !== undefined){
 			const msg = `Reset with reason "${reason}" will be ignored because reset with reason ` +
 				`"${this._resetReason}" is already in progress.`;
-			console.error(msg);
+			log.error(msg);
 			console.trace();
 			return;
 		}
 
 		this._resetReason = reason;
 		if (this._service) {
-			const  msg = `Initiating reset for service "${this._service.getServiceName()}" for ` +
+			const msg = `Initiating reset for service "${this._service.getServiceName()}" for ` +
 				`reason: "${reason}"`;
-			console.error(msg);
+			log.warn(msg);
 			try {
 				this._service.onReset();
 			}
 			catch(error){
-				console.error(`Error while resetting service "${this._service.getServiceName()}":`);
-				console.error(error);
+				log.error(`Error while resetting service "${this._service.getServiceName()}":`);
+				log.error(error);
 				console.trace();
 			}
 		}
@@ -148,7 +149,7 @@ export class ServiceFrame {
 		}
 		catch( error ){
 			const errMessage = `Error publishing alert for subject "${subject}": ${error}`;
-			console.error(errMessage);
+			log.error(errMessage);
 			console.trace();
 			throw new Error(errMessage);
 		}
@@ -156,7 +157,7 @@ export class ServiceFrame {
 
 	private resettingInFiveSeconds(): void{
 		const asyncFunc = async (): Promise<void> => {
-			console.log("Resetting service...")
+			log.info("Resetting service...")
 			this._mqttConnection = new MqttServerConnection(this._mqttServerUrl);
 			if (!this._service){
 				throw new Error("No service available for reset.");
@@ -164,8 +165,8 @@ export class ServiceFrame {
 			await this.initFrameAsync(this._service);
 		}
 		asyncFunc().catch(error => {
-			console.error(`Error while resetting service:`);
-			console.error(error);
+			log.error(`Error while resetting service:`);
+			log.error(error);
 			console.trace();
 			this.exit();
 		});
@@ -177,18 +178,18 @@ export class ServiceFrame {
 			const reason = this._resetReason;
 			if (!serviceName){
 				const errMessage = `Did not have a service to alert reset reason "${reason}"`;
-				console.error(errMessage);
+				log.error(errMessage);
 				console.trace();
 				throw new Error(errMessage);
 			}
 			if (!reason){
 				const errMessage = `Did not have a reset reason to alert for service "${serviceName}"`;
-				console.error(errMessage);
+				log.error(errMessage);
 				console.trace();
 				throw new Error(errMessage);
 			}
 			try{
-				console.log(`Alerting reset reason after reset for service "${serviceName}"`);
+				log.info(`Alerting reset reason after reset for service "${serviceName}"`);
 				await this.alertAsync(
 					`${serviceName} Reset`,
 					`Service "${serviceName}" was reset for reason: ${reason}`,
@@ -198,14 +199,14 @@ export class ServiceFrame {
 			}
 			catch (error){
 				const errMessage = `Could not alert reset reason for service "${serviceName}": ${error}`
-				console.error(errMessage);
+				log.error(errMessage);
 				console.trace();
 				throw new Error(errMessage);
 			}
 		}
 		asyncFunc().catch(error => {
 			const errMsg = `Panicing since alerting reason after reset faild: ${error}`;
-			console.error(errMsg);
+			log.error(errMsg);
 			console.trace();
 			throw new Error(errMsg);
 		});

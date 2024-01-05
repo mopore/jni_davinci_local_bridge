@@ -1,3 +1,4 @@
+import { log } from "./logger/log.js";
 
 export function parseEnvVariable(envName: string): string{
 	const envRawValue = process.env[envName];
@@ -11,7 +12,7 @@ export function parseEnvVariable(envName: string): string{
 	}
 	catch (error){
 		const errorMessage = `Could not parse environment variable for '${envName}'. Please check.`;
-		console.error(errorMessage);
+		log.error(errorMessage);
 		console.trace();
 		throw new Error(errorMessage);
 	}

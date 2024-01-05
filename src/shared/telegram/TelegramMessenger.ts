@@ -1,5 +1,6 @@
 import { ServiceFrame } from "../ServiceFrame.js";
 import { sharedTopics } from "../SharedTopics.js";
+import { log } from "../logger/log.js";
 
 
 
@@ -16,12 +17,12 @@ export class TelegramMessenger{
 	 * @param message The message to send to JNI via the telegram bot.
 	 */
 	async sendAsync(message: string): Promise<void>{
-		console.log(`Posting telegram message via MQTT: ${message}`);
+		log.info(`Posting telegram message via MQTT: ${message}`);
 		try {
 			await this._frame.mqttConnection.publishAsync(sharedTopics.TELEGRAM_SEND, message);
 		}
 		catch(error){
-			console.error(`Error sending telegram message via MQTT: ${error}`);
+			log.error(`Error sending telegram message via MQTT: ${error}`);
 			console.trace();
 			throw error;
 		}

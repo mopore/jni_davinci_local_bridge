@@ -1,4 +1,5 @@
-import MQTT, {MqttClient} from "mqtt";
+import MQTT, { MqttClient } from "mqtt";
+import { log } from "../logger/log.js";
 
 const UNDEFINED_STRING = "undefined" as const;
 
@@ -24,14 +25,14 @@ export class MqttServerConnection {
 	){
 		if (_mqttServerUrl === UNDEFINED_STRING){
 			const errMsg = "MQTT server URL is not defined!";
-			console.error(errMsg);
+			log.error(errMsg);
 			console.trace();
 			throw new Error(errMsg);
 		}
 	}
 
 	private connectAsync(): void {
-		console.log(`Connecting to MQTT server via "${this._mqttServerUrl}"...`);
+		log.info(`Connecting to MQTT server via "${this._mqttServerUrl}"...`);
 		try {
 			this._client = MQTT.connect(this._mqttServerUrl, {
 				connectTimeout: 10000,
@@ -45,12 +46,12 @@ export class MqttServerConnection {
 				if (this._reconnecting) {
 					const timeDiff = Date.now() - this._connectionLostTimestamp;
 					const timeDiffSeconds = timeDiff / 1000;
-					console.log(`Reestablished connection to MQTT` +
+					log.warn(`Reestablished connection to MQTT` +
 						` server after ${timeDiffSeconds.toFixed(0)} second(s).`);
 					this._reconnecting = false;
 				}
 				else {
-					console.log("Connected to MQTT server!");
+					log.info("Connected to MQTT server!");
 				}
 			});
 
@@ -61,8 +62,8 @@ export class MqttServerConnection {
 				}
 				if (this._reconnecting === false) {
 					this._connectionLosses++;
-					console.error(`Connection loss No. ${this._connectionLosses}`);
-					console.log("Reconnecting to MQTT...");
+					log.error(`Connection loss No. ${this._connectionLosses}`);
+					log.warn("Reconnecting to MQTT...");
 					this._reconnecting = true;
 					this._connectionLosses++;
 					this._connectionLostTimestamp = Date.now();
@@ -76,14 +77,14 @@ export class MqttServerConnection {
 				}
 				if (this._connected){
 					this._connected = false;
-					console.error( "Connection to MQTT server lost!");
+					log.error( "Connection to MQTT server lost!");
 					console.trace();
 				}
 			});
 
 			// Will be called when the client commands to disconnect
 			this._client.on("end", () => {
-				console.error("Actively closed connection to MQTT server!");
+				log.warn("Actively closed connection to MQTT server!");
 				this._connected = false;
 			})
 
@@ -97,7 +98,7 @@ export class MqttServerConnection {
 			else {
 				message = String(error)
 			}
-			console.error(`Error connecting to MQTT server: ${message}`);
+			log.error(`Error connecting to MQTT server: ${message}`);
 			console.trace();
 		}
 	}
@@ -105,7 +106,7 @@ export class MqttServerConnection {
 	async connectAndWaitAsync(waitTimeMillis: number): Promise<void> {
 		const startTime = Date.now();
 		this.connectAsync();
-		console.log(`Waiting ${waitTimeMillis} millis for connection...`);
+		log.info(`Waiting ${waitTimeMillis} millis for connection...`);
 		while(! this._connected) {
 			await sleep(100);
 			const timeDiff = Date.now() - startTime;
@@ -146,7 +147,7 @@ export class MqttServerConnection {
 			this._publish(topic, message);
 		} catch (error) {
 			const errorMessage = `Error publishing: ${error}`;
-			console.error(errorMessage);
+			log.error(errorMessage);
 			console.trace();
 			throw new Error(errorMessage);
 		}
@@ -179,7 +180,7 @@ export class MqttServerConnection {
 			this._subscribe(topic, handler);
 		} catch (error) {
 			const errorMessage = `Error subscribing: ${error}`;
-			console.error(errorMessage);
+			log.error(errorMessage);
 			console.trace();
 			if (!this._exitRequested){
 				throw new Error(errorMessage);
@@ -203,7 +204,7 @@ export class MqttServerConnection {
 				}
 				else {
 					const errorMessage = `Error subscribing: ${error}`;
-					console.error(errorMessage);
+					log.error(errorMessage);
 					console.trace();
 					throw new Error(errorMessage);
 				}
@@ -227,14 +228,14 @@ export class MqttServerConnection {
 	 * This will close the connection to the MQTT server. The client will not be usable anymore.
 	 */
 	exit(): void {
-		console.log("Shutdown for MQTT Server Connection requested...");
+		log.warn("Shutdown for MQTT Server Connection requested...");
 		this._exitRequested = true;
 		try {
 			this.checkClientAndConnection();
 		}
 		catch (error) {
 			const errorMessage = `Errors decteted before exiting MqttServerConnection: ${error}`;
-			console.error(errorMessage);
+			log.error(errorMessage);
 			console.trace();
 		}
 		if (this._client){
@@ -244,7 +245,7 @@ export class MqttServerConnection {
 			}
 			catch (error) {
 				const errorMessage = `Error calling "end" on MQTT client: ${error}`;
-				console.error(errorMessage);
+				log.error(errorMessage);
 				console.trace();
 			}
 		}
@@ -254,13 +255,13 @@ export class MqttServerConnection {
 	private checkClientAndConnection(): void {
 		if (! this._connected) {
 			const errorMessage = `There is no active connection!`;
-			console.error(errorMessage)
+			log.error(errorMessage)
 			console.trace();
 			throw new Error(errorMessage);
 		}
 		if (! this._client) {
 			const errorMessage = "Client was not yet initialized!";
-			console.error(errorMessage);
+			log.error(errorMessage);
 			console.trace();
 			throw new Error(errorMessage);
 		}

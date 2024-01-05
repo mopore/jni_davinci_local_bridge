@@ -15,8 +15,6 @@ export const enums = {
 			return value as unknown as E[keyof E];
 		}
 		const errMsg = `Could not convert "${value}" to enum value`;
-		console.error(errMsg);
-		console.trace();
 		throw new Error(errMsg);
 	},
 
@@ -43,8 +41,6 @@ export const enums = {
 		}
 
 		const errMsg = `Could not convert "${value}" to enum value`;
-		console.error(errMsg);
-		console.trace();
 		throw new Error(errMsg);
 	},
 }

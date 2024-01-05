@@ -1,3 +1,4 @@
+import { log } from "../logger/log.js";
 import { MqttServerConnection } from "../mqtt/MqttServerConnection.js";
 import { CommandRegistration } from "../SharedTypes.js";
 
@@ -26,7 +27,7 @@ export class CommandRegistrar {
 			await this._mqttConnection.publishAsync(REGISTER_COMMANDS_TOPIC_NAME, commandsMessage);
 		}
 		asyncFunc().catch(error => {
-			console.error(`Error registering commands via MQTT server: ${error}`);
+			log.error(`Error registering commands via MQTT server: ${error}`);
 			console.trace();
 			// We can accept this error. The Alive Ticker will trigger a reset of the service
 			// anyway if the MQTT server is not available.
