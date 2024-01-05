@@ -17,7 +17,7 @@ export class TelegramMessenger{
 	 * @param message The message to send to JNI via the telegram bot.
 	 */
 	async sendAsync(message: string): Promise<void>{
-		log.info(`Posting telegram message via MQTT: ${message}`);
+		log.info(`Posting telegram message via MQTT: "${message}"`);
 		try {
 			await this._frame.mqttConnection.publishAsync(sharedTopics.TELEGRAM_SEND, message);
 		}
