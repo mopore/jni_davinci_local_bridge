@@ -62,6 +62,7 @@ The VS Code launch config (.vscode/launch.json) and the provided docker compose 
 - Update Davinci Bridget to newest OpenAI API.
 - Move to node 18.
 - TypeScript 5.3
+- Introduce winston.
 - Update dependencies.
 - Tougher linting rules.
 

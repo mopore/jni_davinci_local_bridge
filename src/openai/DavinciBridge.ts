@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { log } from "../shared/logger/log.js";
 
 
 export class DavinciBridge {
@@ -32,7 +33,7 @@ export class DavinciBridge {
 			responseText = String(rawInput);
 		}
 		catch (error) {
-			console.error(`Error requesting response from Open AI: ${error}`);
+			log.error(`Error requesting response from Open AI: ${error}`);
 			console.trace();
 		}
 		if (!responseText) {

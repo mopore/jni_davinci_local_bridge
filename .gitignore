@@ -58,4 +58,5 @@ Temporary Items
 /dist
 /secrets/**
 /resources/**
+/logs
 .env

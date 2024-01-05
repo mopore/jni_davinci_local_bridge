@@ -9,7 +9,7 @@
     "url": "https://github.com/mopore/jni_davinci_local_bridge.git"
   },
   "scripts": {
-    "test": "mocha dist/test/**/*.js --recursive --exit",
+    "test": "LOG_SETUP=prod mocha dist/test/**/*.js --recursive --exit",
     "build": "rm -rf ./dist && tsc -b && npx eslint .",
     "build-api-image": "docker image build -t jni_davinci_local_bridge .",
     "up-container": "docker-compose -f ./config/local-api/docker-compose.yaml up -d",
@@ -28,10 +28,10 @@
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.11",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.5",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
-    "chai": "^4.3.10",
+    "@types/node": "^20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "chai": "^5.0.0",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "mocha": "^10.2.0",
@@ -41,7 +41,8 @@
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "mqtt": "~5.3.3",
-    "openai": "^4.23.0"
+    "mqtt": "~5.3.4",
+    "openai": "^4.24.1",
+    "winston": "^3.11.0"
   }
 }

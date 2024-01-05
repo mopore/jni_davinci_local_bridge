@@ -12,10 +12,12 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/src/api-server/ApiServer.ts",
+            "console": "integratedTerminal",
             "env": {
                 "CONFIG_FILE_ENV":"ch-jni-local", 
                 "TZ":"UTC",
                 "API_PORT":"8090",
+                "LOG_SETUP":"dev",
             },
             "outFiles": [
                 "${workspaceFolder}/dist/**/*.js"
@@ -28,6 +30,10 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/src/App.ts",
+            "console": "integratedTerminal",
+            "env": {
+                "LOG_SETUP":"dev",
+            },
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
