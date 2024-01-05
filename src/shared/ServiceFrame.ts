@@ -189,7 +189,7 @@ export class ServiceFrame {
 				throw new Error(errMessage);
 			}
 			try{
-				log.info(`Alerting reset reason after reset for service "${serviceName}"`);
+				log.info(`Alerting reset reason after reset for service "${serviceName}": "${reason}"`);
 				await this.alertAsync(
 					`${serviceName} Reset`,
 					`Service "${serviceName}" was reset for reason: ${reason}`,
