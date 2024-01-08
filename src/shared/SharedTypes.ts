@@ -1,4 +1,5 @@
 export type PresenceEvent = {
+	name: string,
 	start: boolean,
 	end: boolean,
 	utcTime: Date
