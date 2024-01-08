@@ -17,3 +17,7 @@ export function parseEnvVariable(envName: string): string{
 		throw new Error(errorMessage);
 	}
 }
+
+export const sleepAsync = async (ms: number): Promise<void> => {
+	return new Promise(resolve => setTimeout(resolve, ms))
+};
