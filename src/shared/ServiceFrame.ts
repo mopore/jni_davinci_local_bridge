@@ -19,7 +19,7 @@ export class ServiceFrame {
 	constructor(
 		private readonly _mqttServerUrl: string,
 	){
-		log.warn("Serice Init...");
+		log.warn("Service Init...");
 		this._mqttConnection = new MqttServerConnection(_mqttServerUrl);
 	}
 
