@@ -2,8 +2,8 @@ import winston from "winston";
 import { parseEnvVariable } from "../SharedFunctions.js";
 import { enums } from "../enums/enums.js";
 
-const LOG_SETUP_NAME = "LOG_SETUP" as const;
-enum LogSetup {
+export const LOG_SETUP_NAME = "LOG_SETUP" as const;
+export enum LogSetup {
 	PRODUCTION = "prod",
 	DEVELOPMENT = "dev",
 }
