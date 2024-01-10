@@ -23,4 +23,5 @@ export type CommandRegistration = {
 export enum ActionSource {
 	USER = "USER",
 	SYSTEM = "SYSTEM",
+	UNKNOWN = "UNKNOWN",
 }
