@@ -19,3 +19,8 @@ export type CommandRegistration = {
 	extendable: boolean,
 	description: string,
 }
+
+export enum ActionSource {
+	USER = "USER",
+	SYSTEM = "SYSTEM",
+}
