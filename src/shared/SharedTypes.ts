@@ -2,14 +2,15 @@ export type PresenceEvent = {
 	name: string,
 	start: boolean,
 	end: boolean,
-	utcTime: Date
+	utcTime: Date,
+	proof?: string,
 }
 
 export type AlertEvent = {
 	subject: string,
 	message: string,
 	urgent: boolean,
-	utcTime: Date
+	utcTime: Date,
 }
 
 export type CommandRegistration = {
