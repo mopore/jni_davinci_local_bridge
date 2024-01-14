@@ -1,3 +1,5 @@
+export const NO_PROOF_PROVIDED_TEXT = "<no proof provided>" as const;
+
 export type PresenceEvent = {
 	name: string,
 	start: boolean,
