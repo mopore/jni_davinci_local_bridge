@@ -1,6 +1,7 @@
 export const sharedTopics = {
 	TELEGRAM_SEND : "jniHome/services/telegramBot/send" as const,
 	BRIEFING_ALERT: "jniHome/services/briefing/alert" as const,
-	HUE_BRIDGE_SYSTEM_COMMAND: "jniHome/services/hueBridge/command" as const,
-	HUE_BRIDGE_USER_COMMAND: "jniHome/services/hueBridge/commandUser" as const,
+	HALO_SYSTEM_COMMAND: "jniHome/services/halo/command" as const,
+	HALO_USER_COMMAND: "jniHome/services/halo/commandUser" as const,
+	HALO_MOVE_HISTORY: "jniHome/services/halo/moveHistory" as const,
 }
