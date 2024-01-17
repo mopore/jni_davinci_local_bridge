@@ -21,3 +21,23 @@ export function parseEnvVariable(envName: string): string{
 export const sleepAsync = async (ms: number): Promise<void> => {
 	return new Promise(resolve => setTimeout(resolve, ms))
 };
+
+export const managedCallAsync = async <T>(
+	func: () => Promise<T>,
+	retryCount: number,
+	retryDelayMs: number,
+): Promise<T> => {
+	for (let i = 0; i < retryCount; i++){
+		try {
+			return await func();
+		}
+		catch (err: unknown){
+			log.warn(`Call failed. Retrying in ${retryDelayMs} ms. Error: ${err}`);
+			await sleepAsync(retryDelayMs);
+		}
+	}
+	const errorMessage = `Call failed after ${retryCount}`;
+	log.error(errorMessage);
+	console.trace();
+	throw new Error(errorMessage);
+}
