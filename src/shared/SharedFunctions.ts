@@ -27,7 +27,7 @@ export const managedCallAsync = async <T>(
 	retryCount: number,
 	retryDelayMs: number,
 ): Promise<T> => {
-	for (let i = 0; i < retryCount; i++){
+	for (let i = 0; i <= retryCount; i++){
 		try {
 			return await func();
 		}
