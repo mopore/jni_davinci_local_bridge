@@ -23,7 +23,7 @@ export class None<T> extends Option<T> {
 	unwrap(): T {
 		const errMessageOut = "Unwrap failed option";
 		log.error(errMessageOut);
-		console.trace();
+		log.trace();
 		throw new Error(errMessageOut);
 	}
 
@@ -34,7 +34,7 @@ export class None<T> extends Option<T> {
 	unwrapExpect(errMessage: string): T {
 		const errMessageOut = `Unwrap failed: ${errMessage}`;
 		log.error(errMessageOut);
-		console.trace();
+		log.trace();
 		throw new Error(errMessageOut);
 	}
 }
@@ -69,7 +69,7 @@ export class Some<T> extends Option<T> {
 		if (this.isNone()){
 			const errMessageOut = `Unwrap failed: ${_errMessage}`;
 			log.error(errMessageOut);
-			console.trace();
+			log.trace();
 			throw new Error(errMessageOut);
 		}
 		return this.value;

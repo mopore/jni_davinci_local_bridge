@@ -39,7 +39,7 @@ export class AliveTicker {
 					if (this._failedAliveTicks > 2){
 						const errMessage = "Requesting reset after alive tick failed 3 times.";
 						log.error(errMessage);
-						console.trace();
+						log.trace();
 						this._frame.reset("Alive tick could not be send.");
 					}
 				}
@@ -52,7 +52,7 @@ export class AliveTicker {
 		asyncFunc().catch(error => {
 			const errMsg = `Panincing due to unexpected error in AliveTicker: ${error}`;
 			log.error(errMsg);
-			console.trace();
+			log.trace();
 			throw new Error(errMsg);
 		});
 	}

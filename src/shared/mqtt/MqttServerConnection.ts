@@ -26,7 +26,7 @@ export class MqttServerConnection {
 		if (_mqttServerUrl === UNDEFINED_STRING){
 			const errMsg = "MQTT server URL is not defined!";
 			log.error(errMsg);
-			console.trace();
+			log.trace();
 			throw new Error(errMsg);
 		}
 	}
@@ -78,7 +78,7 @@ export class MqttServerConnection {
 				if (this._connected){
 					this._connected = false;
 					log.error( "Connection to MQTT server lost!");
-					console.trace();
+					log.trace();
 				}
 			});
 
@@ -99,7 +99,7 @@ export class MqttServerConnection {
 				message = String(error)
 			}
 			log.error(`Error connecting to MQTT server: ${message}`);
-			console.trace();
+			log.trace();
 		}
 	}
 
@@ -148,7 +148,7 @@ export class MqttServerConnection {
 		} catch (error) {
 			const errorMessage = `Error publishing: ${error}`;
 			log.error(errorMessage);
-			console.trace();
+			log.trace();
 			throw new Error(errorMessage);
 		}
 	}
@@ -181,7 +181,7 @@ export class MqttServerConnection {
 		} catch (error) {
 			const errorMessage = `Error subscribing: ${error}`;
 			log.error(errorMessage);
-			console.trace();
+			log.trace();
 			if (!this._exitRequested){
 				throw new Error(errorMessage);
 			}
@@ -205,7 +205,7 @@ export class MqttServerConnection {
 				else {
 					const errorMessage = `Error subscribing: ${error}`;
 					log.error(errorMessage);
-					console.trace();
+					log.trace();
 					throw new Error(errorMessage);
 				}
 			}));
@@ -236,7 +236,7 @@ export class MqttServerConnection {
 		catch (error) {
 			const errorMessage = `Errors decteted before exiting MqttServerConnection: ${error}`;
 			log.error(errorMessage);
-			console.trace();
+			log.trace();
 		}
 		if (this._client){
 			this._connected = false;
@@ -246,7 +246,7 @@ export class MqttServerConnection {
 			catch (error) {
 				const errorMessage = `Error calling "end" on MQTT client: ${error}`;
 				log.error(errorMessage);
-				console.trace();
+				log.trace();
 			}
 		}
 	}
@@ -256,13 +256,13 @@ export class MqttServerConnection {
 		if (! this._connected) {
 			const errorMessage = `There is no active connection!`;
 			log.error(errorMessage)
-			console.trace();
+			log.trace();
 			throw new Error(errorMessage);
 		}
 		if (! this._client) {
 			const errorMessage = "Client was not yet initialized!";
 			log.error(errorMessage);
-			console.trace();
+			log.trace();
 			throw new Error(errorMessage);
 		}
 	}

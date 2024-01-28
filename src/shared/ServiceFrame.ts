@@ -74,7 +74,7 @@ export class ServiceFrame {
 			catch(error){
 				log.error(`Error while exiting service "${this._service.getServiceName()}":`);
 				log.error(error);
-				console.trace();
+				log.trace();
 			}
 		}
 		if (this._ticker){
@@ -104,7 +104,7 @@ export class ServiceFrame {
 			const msg = `Reset with reason "${reason}" will be ignored because reset with reason ` +
 				`"${this._resetReason}" is already in progress.`;
 			log.error(msg);
-			console.trace();
+			log.trace();
 			return;
 		}
 
@@ -119,7 +119,7 @@ export class ServiceFrame {
 			catch(error){
 				log.error(`Error while resetting service "${this._service.getServiceName()}":`);
 				log.error(error);
-				console.trace();
+				log.trace();
 			}
 		}
 		if (this._ticker){
@@ -151,7 +151,7 @@ export class ServiceFrame {
 		catch( error ){
 			const errMessage = `Error publishing alert for subject "${subject}": ${error}`;
 			log.error(errMessage);
-			console.trace();
+			log.trace();
 			throw new Error(errMessage);
 		}
 	}
@@ -168,7 +168,7 @@ export class ServiceFrame {
 		asyncFunc().catch(error => {
 			log.error(`Error while resetting service:`);
 			log.error(error);
-			console.trace();
+			log.trace();
 			this.exit();
 		});
 	}
@@ -180,13 +180,13 @@ export class ServiceFrame {
 			if (!serviceName){
 				const errMessage = `Did not have a service to alert reset reason "${reason}"`;
 				log.error(errMessage);
-				console.trace();
+				log.trace();
 				throw new Error(errMessage);
 			}
 			if (!reason){
 				const errMessage = `Did not have a reset reason to alert for service "${serviceName}"`;
 				log.error(errMessage);
-				console.trace();
+				log.trace();
 				throw new Error(errMessage);
 			}
 			try{
@@ -201,14 +201,14 @@ export class ServiceFrame {
 			catch (error){
 				const errMessage = `Could not alert reset reason for service "${serviceName}": ${error}`
 				log.error(errMessage);
-				console.trace();
+				log.trace();
 				throw new Error(errMessage);
 			}
 		}
 		asyncFunc().catch(error => {
 			const errMsg = `Panicing since alerting reason after reset faild: ${error}`;
 			log.error(errMsg);
-			console.trace();
+			log.trace();
 			throw new Error(errMsg);
 		});
 	}

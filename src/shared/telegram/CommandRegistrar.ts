@@ -28,7 +28,7 @@ export class CommandRegistrar {
 		}
 		asyncFunc().catch(error => {
 			log.error(`Error registering commands via MQTT server: ${error}`);
-			console.trace();
+			log.trace();
 			// We can accept this error. The Alive Ticker will trigger a reset of the service
 			// anyway if the MQTT server is not available.
 		});

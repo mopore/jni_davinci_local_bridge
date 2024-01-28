@@ -13,7 +13,7 @@ export function parseEnvVariable(envName: string): string{
 	catch (error){
 		const errorMessage = `Could not parse environment variable for '${envName}'. Please check.`;
 		log.error(errorMessage);
-		console.trace();
+		log.trace();
 		throw new Error(errorMessage);
 	}
 }
@@ -38,6 +38,6 @@ export const managedCallAsync = async <T>(
 	}
 	const errorMessage = `Call failed after ${retryCount}`;
 	log.error(errorMessage);
-	console.trace();
+	log.trace();
 	throw new Error(errorMessage);
 }

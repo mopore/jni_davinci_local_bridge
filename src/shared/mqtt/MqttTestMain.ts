@@ -30,7 +30,7 @@ log.info("Starting...");
 
 	client.subscribeAsync(MQTT_TEST_TOPIC, handler).catch(error => {
 		log.error(`Error subscribing to topic "${MQTT_TEST_TOPIC}": ${error}`);
-		console.trace();
+		log.trace();
 		throw error;
 	});
 	const testType: TestType = {
@@ -40,7 +40,7 @@ log.info("Starting...");
 	const testMessage = JSON.stringify(testType);
 	client.publishAsync(MQTT_TEST_TOPIC, testMessage).catch(error => {
 		log.error(`Error publishing to topic "${MQTT_TEST_TOPIC}": ${error}`);
-		console.trace();
+		log.trace();
 		throw error;
 	});
 
@@ -52,7 +52,7 @@ log.info("Starting...");
 
 })().catch(error => {
 	log.error(error);
-	console.trace();
+	log.trace();
 });
 
 log.info("Ending main...");

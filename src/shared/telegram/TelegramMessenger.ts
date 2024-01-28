@@ -25,7 +25,7 @@ export class TelegramMessenger{
 		}
 		catch(error){
 			log.error(`Error sending telegram message via MQTT: ${error}`);
-			console.trace();
+			log.trace();
 			throw error;
 		}
 	}
