@@ -15,11 +15,18 @@ const colorizedDevFormat = winston.format.printf(({ level, message, timestamp })
 
 const loglevel = enums.to(LogSetup, parseEnvVariable(LOG_SETUP_NAME));
 
-let internalLog: winston.Logger;
+
+class LoggerWithTrace extends winston.Logger{
+	trace(): void {
+		console.trace();
+	}
+}
+
+let internalLog: LoggerWithTrace
 
 switch (loglevel) {
 	case LogSetup.PRODUCTION:
-		internalLog = winston.createLogger({
+		internalLog = new LoggerWithTrace({
 			level: "info",
 			format: winston.format.combine(
 				winston.format.timestamp({
@@ -33,7 +40,7 @@ switch (loglevel) {
 		});
 		break;
 	case LogSetup.DEVELOPMENT:
-		internalLog = winston.createLogger({
+		internalLog = new LoggerWithTrace({
 			level: "debug",
 			format: winston.format.combine(
 				winston.format.timestamp({
