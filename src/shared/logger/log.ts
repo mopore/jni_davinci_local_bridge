@@ -16,19 +16,40 @@ const colorizedDevFormat = winston.format.printf(({ level, message, timestamp })
 const loglevel = enums.to(LogSetup, parseEnvVariable(LOG_SETUP_NAME));
 
 
-export class ExtendedLogger extends winston.Logger{
+export class ExtendedLogger{
+
+	private readonly logger: winston.Logger;
+
+	constructor(options: winston.LoggerOptions) {
+		this.logger = winston.createLogger(options);
+	}
+
 	trace(): void {
 		console.trace();
 	}
+
+	error(message: unknown): void {
+		this.logger.error(message);
+	}
+
+	warn(message: unknown): void {
+		this.logger.warn(message);
+	}
+
+	info(message: unknown): void {
+		this.logger.info(message);
+	}
+
+	debug(message: unknown): void {
+		this.logger.debug(message);
+	}
 }
 
-export type LoggerWithTrace = ExtendedLogger & winston.Logger;
-
-const createLogger = (options: winston.LoggerOptions): LoggerWithTrace => {
-	return winston.createLogger(options) as LoggerWithTrace;
+const createLogger = (options: winston.LoggerOptions): ExtendedLogger => {
+	return new ExtendedLogger(options);
 }
 
-let internalLog: LoggerWithTrace
+let internalLog: ExtendedLogger;
 
 switch (loglevel) {
 	case LogSetup.PRODUCTION:
@@ -73,4 +94,4 @@ switch (loglevel) {
 		throw new Error("Log level not supported");
 }
 
-export const log: LoggerWithTrace = internalLog;
+export const log: ExtendedLogger = internalLog;
