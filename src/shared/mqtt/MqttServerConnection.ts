@@ -106,7 +106,7 @@ export class MqttServerConnection {
 	async connectAndWaitAsync(waitTimeMillis: number): Promise<void> {
 		const startTime = Date.now();
 		this.connectAsync();
-		log.info(`Waiting ${waitTimeMillis} millis for connection...`);
+		log.info(`Waiting ${(waitTimeMillis/1000)/60} minutes for connection...`);
 		while(! this._connected) {
 			await sleep(100);
 			const timeDiff = Date.now() - startTime;
