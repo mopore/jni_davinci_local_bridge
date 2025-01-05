@@ -83,7 +83,7 @@ export const some = <T>(value: T): Some<T> => new Some(value);
 export function optionalCatch<T>(fn: () => T): Option<T> {
 	try {
 		return some(fn());
-	} catch (e) {
+	} catch {
 		return none();
 	}
 }
@@ -91,7 +91,7 @@ export function optionalCatch<T>(fn: () => T): Option<T> {
 export async function optionalResolve<T>(promise: Promise<T>): Promise<Option<T>> {
 	try {
 		return some(await promise);
-	} catch (err) {
+	} catch {
 		return none();
 	}
 }
@@ -103,7 +103,7 @@ function toOptional<I, O extends I>(fn: (input: I) => input is O) {
 				return some(arg);
 			}
 			return none();
-		} catch (err) {
+		} catch {
 			return none();
 		}
 	}

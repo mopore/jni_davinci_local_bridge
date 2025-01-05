@@ -1,7 +1,7 @@
 import MQTT, { MqttClient } from "mqtt";
 import { log } from "../logger/log.js";
 
-const UNDEFINED_STRING = "undefined" as const;
+const UNDEFINED_STRING = "undefined";
 
 
 const sleep = async (ms: number): Promise<void> =>{

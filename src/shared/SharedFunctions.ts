@@ -10,7 +10,7 @@ export function parseEnvVariable(envName: string): string{
 		}
 		return envValue;
 	}
-	catch (error){
+	catch {
 		const errorMessage = `Could not parse environment variable for '${envName}'. Please check.`;
 		log.error(errorMessage);
 		log.trace();

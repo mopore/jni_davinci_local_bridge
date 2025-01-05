@@ -1,4 +1,4 @@
-export const NO_PROOF_PROVIDED_TEXT = "<no proof provided>" as const;
+export const NO_PROOF_PROVIDED_TEXT = "<no proof provided>";
 
 export type PresenceEvent = {
 	name: string,
