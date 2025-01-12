@@ -23,20 +23,23 @@ export class Functions {
 
         const testPath = `/api/test`;
         log.info(`Path applied: ${testPath}`);
-        app.get(testPath, ( req, resp ) => {
-            // Test if API is available
-            try {
-                const simpleAnswer: ApiResponse = {answer: "YES"}
-                log.info(`Path "${testPath}" called. Will responde with: "${JSON.stringify(simpleAnswer)}"`);
-                resp.send( simpleAnswer );
-            }
-            catch (error) {
-                log.error(error);
-                console.trace();
-                return resp.status(400).send({error: String(error)});
-            }
-        });
+        
+        // FIXME There is an error with the typing.
+        // app.get(testPath, ( _: Request<any>, resp: Response ) => {
+        //     // Test if API is available
+        //     try {
+        //         const simpleAnswer: ApiResponse = {answer: "YES"}
+        //         log.info(`Path "${testPath}" called. Will responde with: "${JSON.stringify(simpleAnswer)}"`);
+        //         resp.send( simpleAnswer );
+        //     }
+        //     catch (error) {
+        //         log.error(error);
+        //         console.trace();
+        //         return resp.status(400).send({error: String(error)});
+        //     }
+        // });
 
+        // FIXME There must be a better way to implement this without the async function.
         const davinciPath = `/api/davinci`;
         log.info(`Path applied: ${davinciPath}`);
         app.post(davinciPath, ( req, resp ) => {
